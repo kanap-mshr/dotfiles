@@ -18,6 +18,39 @@ if dein#load_state('$HOME/.cache/dein')
 
   " ----- 全般 -----
 
+  " ## 選択範囲指定を効率化
+  call dein#add('terryma/vim-expand-region')
+
+  " ## eitorconfigを使用可能にする
+  call dein#add('editorconfig/editorconfig-vim')
+
+  " ## コメントアウト
+  " - gcc	現在の行のコメント・コメント解除を切り替え
+  " - g>c	現在の行をコメント
+  " - g<c	現在の行をアンコメント
+  " - visoalモードで gc	選択範囲のコメント・コメント解除を切り替え
+  call dein#add('tomtom/tcomment_vim')
+
+  " TODO: スペルチェックのセッティング
+  " http://www.yukihisa08.com/archives/12680263.html
+
+  " ## 英語のスペルミスチェック
+  " - TODO: 辞書の追加
+  call dein#add('ujihisa/neco-look')
+
+  " ## Codic
+  call dein#add('rhysd/unite-codic.vim')
+  call dein#add('koron/codic-vim')
+
+  " ## グーグル翻訳を起動
+  " - 範囲選択をした状態で:Gtransコマンド
+  " - TODO: 以下を参考に要設定
+  "   https://github.com/haya14busa/gtrans
+  call dein#add('haya14busa/vim-open-googletranslate')
+  call dein#add('haya14busa/vim-gtrans')
+  " TODO: 以下も比較してどっちを使うか決める
+  " call dein#add('skanehira/translate.vim') " グーグル翻訳
+
   " ## インデントを可視化
   call dein#add('nathanaelkane/vim-indent-guides')
 
@@ -83,6 +116,49 @@ if dein#load_state('$HOME/.cache/dein')
   " ## シンタックスチェック (IDEっぽくする)
   call dein#add('scrooloose/syntastic.git')
 
+  " ## 別ウィンドウでそのディレクトリを階層表示する
+  " - nerdtree本体
+  call dein#add('scrooloose/nerdtree')
+  " - 別ウィンドウでもタブの状態を共有する
+  call dein#add('jistr/vim-nerdtree-tabs')
+
+  " ## 自動で閉じカッコ
+  call dein#add('Townk/vim-autoclose')
+
+  " ## ウィンドウサイズ変更
+  " - Ctrl + eでリサイズを開始
+  " - h/j/k/l or 方向キーでウィンドウサイズを調整
+  " - Enterで確定
+  call dein#add('simeji/winresizer')
+
+  " ## 自動補完
+  " - 参考URL: https://qiita.com/hide/items/229ff9460e75426a2d07
+  call dein#add('Shougo/neocomplcache')
+
+  " ## vimからサクッと実行
+  " - ノーマルモードで \r か :QuickRun で実行
+  " - 引数を渡したいときは :QuickRun -args \"foo bar baz\" のように書く
+  " TODO: 使いながらよしなにカスタマイズする
+  "       https://osyo-manga.hatenadiary.org/entry/20120919/1348054752
+  call dein#add('thinca/vim-quickrun')
+
+  " ## コードの列を簡単に揃える
+  " - 使用方法
+  "   - 整形したい範囲をvisualモードで囲む
+  "   - Enterを押す
+  "   - 区切りたい文字を選ぶ(spaceとか)
+  call dein#add('junegunn/vim-easy-align')
+
+  " ## Minimap
+  call dein#add('severin-lemaignan/vim-minimap')
+
+  " ## 非同期でシンタックスチェック
+  " TODO: 既存シンタックスとの比較と検討
+  " call dein#add('w0rp/ale')
+
+  " ## 検索時にマッチした個数とそれが何番目であるかの情報を表示
+  call dein#add('osyo-manga/vim-anzu')
+
 
   " ----- ruby -----
 
@@ -104,9 +180,14 @@ if dein#load_state('$HOME/.cache/dein')
   call dein#add('othree/es.next.syntax.vim')
   " - jQueryやAngularJSなど他のライブラリにも対応
   call dein#add('othree/javascript-libraries-syntax.vim')
-  " ejsのシンタックス
+  " - ejsのシンタックス
   call dein#add('nikvdp/ejs-syntax')
-
+  " - gfでrequire()のモジュールにジャンプ
+  call dein#add('moll/vim-node')
+  " - vueの補完
+  call dein#add('Quramy/tsuquyomi-vue')
+  " - vueのシンタックス
+  call dein#add('posva/vim-vue')
 
 
   " ----- typescript -----
@@ -132,6 +213,50 @@ if dein#load_state('$HOME/.cache/dein')
   " - Create es6 import declaration
   "   - :TsuImportをモジュールの上で実行すると、そのモジュールのインポート宣言がファイル上部に追加
   call dein#add('Quramy/tsuquyomi')
+
+
+  " ----- マークダウン関連 -----
+  " ## シンタックスハイライトと折りたたみ
+  call dein#add('plasticboy/vim-markdown')
+
+  " ## 保存したMarkdownをブラウザでプレビュー可能にする
+  call dein#add('tyru/open-browser.vim')
+
+  " ## カーソル下のurlや文字列を開いたり検索したりする
+  call dein#add('iamcco/markdown-preview.vim')
+
+  " ## マークダウンのプレビュー (previm)
+  call dein#add('kannokanno/previm')
+
+  " ## マークダウンのプレビュー (markdown-preview.nvim)
+  " - 事前に`brew install yarn`をしておく必要がある
+  call dein#add('iamcco/markdown-preview.nvim')
+
+  " ## テーブルセル内表記の動的調整にて罫線をあわせる
+  " - :TableModeToggle で起動
+  call dein#add('dhruvasagar/vim-table-mode')
+
+
+
+  " ----- plantuml関連 -----
+  " TODO: あとで設定する
+  " call dein#add('aklt/plantuml-syntax')
+
+
+  " ----- swagger 関連 -----
+  " TODO: あとで設定する
+  " call dein#add('xavierchow/vim-swagger-preview')
+
+
+
+  " ----- 要検討プラグイン -----
+  " TODO: あとで検討する。
+  "       特に困ってないがこれ使うと補完が爆速になるかもしれない
+  " call dein#add('roxma/nvim-yarp')
+  " call dein#add('roxma/vim-hug-neovim-rpc')
+  " call dein#add('Shougo/deoplete.nvim')
+
+
 
 
 
@@ -164,18 +289,37 @@ let g:indent_guides_enable_on_vim_startup = 1
 let g:tsuquyomi_shortest_import_path = 1
 
 " ----- scrooloose/syntastic.git -----
-" - ファイルを開いたときや保存した時に自動で解析が走らないようにする
-" - 手動で解析を実行するには、:SyntasticCheck　コマンド
-" - 上記コマンドは、キーバインド設定にて別途設定する
+" ファイルを開いたときや保存した時に自動で解析が走らないようにする
+" 手動で解析を実行するには、:SyntasticCheck　コマンド
+" 上記コマンドは、キーバインド設定にて別途設定する
+
+" - エラーメッセージの書式
 set statusline+=%#warningmsg#
+
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
+
+" - location list を常に更新
 let g:syntastic_always_populate_loc_list = 1
+
+" - エラーがあったら自動でロケーションリストを開く
 let g:syntastic_auto_loc_list = 1
+
+" - ファイルを開いたときはチェックしない
 let g:syntastic_check_on_open = 0
+
+" - wqではチェックしない
 let g:syntastic_check_on_wq = 0
-let g:syntastic_mode_map = { 'mode': 'passive', 'passive_filetypes': ['ruby'] }
+
+let g:syntastic_mode_map = {
+      \ 'mode': 'passive',
+      \ 'active_filetypes': ['ruby', 'javascript'],
+      \ 'passive_filetypes': []
+      \ }
+
+" - 構文チェックを行うモジュール
 let g:syntastic_ruby_checkers=['rubocop']
+let g:syntastic_javascript_checkers = ['eslint']
 
 " ----- nikvdp/ejs-syntax -----
 " - インクルードファイルでもシンタックスを付加する
@@ -188,6 +332,89 @@ function! s:DetectEjs()
 endfunction
 autocmd BufNewFile,BufRead * call s:DetectEjs()
 
+" ----- plasticboy/vim-markdown -----
+" - markdownなファイルを開いたときにデフォルトで折りたたみになってしまうをOFF
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_auto_insert_bullets = 0
+let g:vim_markdown_new_list_item_indent = 0
+
+" ----- kannokanno/previm -----
+" - このままだと.mkdのファイルに対してのハイライトらしいため
+"   .mdもfiletype=markdownとなるように設定
+autocmd BufRead,BufNewFile *.md set filetype=markdown
+let g:previm_open_cmd = 'open -a Google\ Chrome'
+
+" ----- scrooloose/nerdtree -----
+function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+ exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+ exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+endfunction
+call NERDTreeHighlightFile('py',     'yellow',  'none', 'yellow',  '#151515')
+call NERDTreeHighlightFile('md',     'blue',    'none', '#3366FF', '#151515')
+call NERDTreeHighlightFile('yml',    'yellow',  'none', 'yellow',  '#151515')
+call NERDTreeHighlightFile('config', 'yellow',  'none', 'yellow',  '#151515')
+call NERDTreeHighlightFile('conf',   'yellow',  'none', 'yellow',  '#151515')
+call NERDTreeHighlightFile('json',   'yellow',  'none', 'yellow',  '#151515')
+call NERDTreeHighlightFile('html',   'yellow',  'none', 'yellow',  '#151515')
+call NERDTreeHighlightFile('styl',   'cyan',    'none', 'cyan',    '#151515')
+call NERDTreeHighlightFile('css',    'cyan',    'none', 'cyan',    '#151515')
+call NERDTreeHighlightFile('rb',     'Red',     'none', 'red',     '#151515')
+call NERDTreeHighlightFile('js',     'Red',     'none', '#ffa500', '#151515')
+call NERDTreeHighlightFile('php',    'Magenta', 'none', '#ff00ff', '#151515')
+" - 隠しファイルをデフォルトで表示
+let NERDTreeShowHidden = 1
+let g:NERDTreeDirArrows = 1
+let g:NERDTreeDirArrowExpandable  = '▶'
+let g:NERDTreeDirArrowCollapsible = '▼'
+
+
+
+" ----- Townk/vim-autoclose -----
+" - 閉じカッコを自動で閉める際のスペース数
+let g:AutoCloseExpandSpace=0
+
+" ----- simeji/winresizer -----
+" - デフォルトだと垂直方向は10行単位、
+"   水平方向は3文字単位で移動されるため
+"   下記設定で1ずつ動くように変更
+let g:winresizer_vert_resize = 1
+let g:winresizer_horiz_resize = 1
+
+" ----- Shougo/neocomplcache -----
+" - TODO: 以下、READMEのデフォルト設定のため使いながら要調整
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplcache.
+let g:neocomplcache_enable_at_startup = 1
+" Use smartcase.
+let g:neocomplcache_enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+" Define dictionary.
+let g:neocomplcache_dictionary_filetype_lists = {
+    \ 'default' : ''
+    \ }
+
+" ----- posva/vim-vue -----
+" - vueなどの
+"   複数の言語が混ざってるファイルだと
+"   vim の効率よくシンタックスハイライトかけようとする機能が
+"   うまくいかないことがあるので、その対応
+autocmd FileType vue syntax sync fromstart
+
+
+
+" ----- 要整理 -----
+" TODO: のちほど適宜ちゃんと場所を考慮して設定する
+"       (とりあえず、整理せずにそのまま昔のmacからの移植)
+
+" つくよみの定義ジャンブを別タブで開く
+" let g:tsuquyomi_definition_split = 1
+
+" テーブル整形
+let g:table_mode_corner = '|'
+
 
 
 
@@ -195,11 +422,9 @@ autocmd BufNewFile,BufRead * call s:DetectEjs()
 " pluginのキーバインド設定
 " -------------------------------------------------
 
-
 " ----- jlanzarotta/bufexplorer -----
 " - bufExplorerを起動
 nmap <silent> ,l :BufExplorer<CR>
-
 
 " ----- Quramy/tsuquyomi -----
 " - 型定義などのツールチップを表示する
@@ -207,9 +432,63 @@ nmap <silent> ,l :BufExplorer<CR>
 set ballooneval
 autocmd FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
 
-
 " ----- scrooloose/syntastic.git -----
 nnoremap <C-C> :w<CR>:SyntasticCheck<CR>
+
+" ----- kannokanno/previm -----
+" ctrl pでプレビュー
+nnoremap <silent> <C-p> :PrevimOpen<CR>
+
+" ----- scrooloose/nerdtree -----
+" - ctrl+nで起動
+map <C-n> :NERDTreeToggle<CR>
+
+
+" ----- Shougo/neocomplcache -----
+" TODO: 以下、READMEの設定そのままのため使いながら要調整
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplcache#undo_completion()
+inoremap <expr><C-l>     neocomplcache#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return neocomplcache#smart_close_popup() . "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplcache#close_popup()
+inoremap <expr><C-e>  neocomplcache#cancel_popup()
+
+
+" ----- severin-lemaignan/vim-minimap -----
+" let g:minimap_show='<leader>ms'
+" let g:minimap_update='<leader>mu'
+" let g:minimap_close='<leader>gc'
+" let g:minimap_toggle='<leader>gt'
+let g:minimap_toggle='<leader>mm'
+
+
+" ----- osyo-manga/vim-anzu -----
+" mapping
+nmap n <Plug>(anzu-n-with-echo)
+nmap N <Plug>(anzu-N-with-echo)
+nmap * <Plug>(anzu-star-with-echo)
+nmap # <Plug>(anzu-sharp-with-echo)
+" clear status
+nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
+" statusline
+set statusline=%{anzu#search_status()}
+
+" ----- terryma/vim-expand-region -----
+vmap v <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
+
 
 
 
@@ -342,6 +621,11 @@ set softtabstop=0
 " ## 行番号を表示
 set nu
 
+" コマンドラインでTabによるファイル名補完を有効化
+set wildmode=longest:full,full
+
+" Beep音を消す
+set vb t_vb=
 
 
 
