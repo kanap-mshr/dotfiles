@@ -1,0 +1,8 @@
+[user]
+	name = kanap-mshr
+	email = 76883092+kanap-mshr@users.noreply.github.com
+
+[alias]
+    s = status
+    ss = status -s
+    co = checkout
