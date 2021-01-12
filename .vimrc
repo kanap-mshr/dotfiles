@@ -215,6 +215,20 @@ if dein#load_state('$HOME/.cache/dein')
   call dein#add('Quramy/tsuquyomi')
 
 
+  " ----- go -----
+  " ## go 関連
+  " https://christina04.hatenablog.com/entry/migrate-from-vim-go-to-vim-lsp
+  call dein#add('prabirshrestha/async.vim')
+  call dein#add('prabirshrestha/asyncomplete.vim')
+  call dein#add('prabirshrestha/asyncomplete-lsp.vim')
+  " - go 以外も色々サポートしてそうな補完など
+  call dein#add('prabirshrestha/vim-lsp')
+  " - lspの設定をよろしくしてくれる
+  call dein#add('mattn/vim-lsp-settings')
+  " - :wで保存した時に、コード整形、goimport
+  call dein#add('mattn/vim-goimports')
+
+
   " ----- マークダウン関連 -----
   " ## シンタックスハイライトと折りたたみ
   call dein#add('plasticboy/vim-markdown')
@@ -367,7 +381,18 @@ let g:NERDTreeDirArrows = 1
 let g:NERDTreeDirArrowExpandable  = '▶'
 let g:NERDTreeDirArrowCollapsible = '▼'
 
-
+" ----- prabirshrestha/vim-lsp -----
+" - ファイルの変更に伴いリアルタイムにエラー表示する機能 Diagnostics を1:有効
+let g:lsp_diagnostics_enabled = 1
+let g:lsp_diagnostics_echo_cursor = 1
+" - 自動で入力補完ポップアップを表示する設定
+let g:asyncomplete_auto_popup = 1
+let g:asyncomplete_auto_completeopt = 0
+" - ポップアップを表示するまでのディレイ
+let g:asyncomplete_popup_delay = 200
+" - LSP の仕様である textEdit を有効
+"   (少し実験的な実装になっている為、もし誤動作する様であれば 0 に設定するのが良い)
+let g:lsp_text_edit_enabled = 0
 
 " ----- Townk/vim-autoclose -----
 " - 閉じカッコを自動で閉める際のスペース数
@@ -489,6 +514,12 @@ set statusline=%{anzu#search_status()}
 vmap v <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
 
+" ----- prabirshrestha/vim-lsp -----
+nmap <silent> gd :LspDefinition<CR>
+nmap <silent> <f2> :LspRename<CR>
+nmap <silent> <Leader>d :LspTypeDefinition<CR>
+nmap <silent> <Leader>r :LspReferences<CR>
+nmap <silent> <Leader>i :LspImplementation<CR>
 
 
 
