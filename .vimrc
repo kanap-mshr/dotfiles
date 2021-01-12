@@ -652,11 +652,21 @@ set softtabstop=0
 " ## 行番号を表示
 set nu
 
-" コマンドラインでTabによるファイル名補完を有効化
+" ## コマンドラインでTabによるファイル名補完を有効化
 set wildmode=longest:full,full
 
-" Beep音を消す
+" ## Beep音を消す
 set vb t_vb=
 
+" ## viminfo ファイルを作成しない
+set viminfo=
 
+" ## swap ファイルを作成しない
+set noswapfile
+
+" ## バックアップファイルを作成しない
+set nobackup
+
+" ## un~ ファイル(undoの情報)を作成しない
+set noundofile
 
