@@ -302,6 +302,34 @@ let g:indent_guides_enable_on_vim_startup = 1
 " - importモジュール宣言を挿入時になるべく短いpathで挿入する
 let g:tsuquyomi_shortest_import_path = 1
 
+" ----- posva/vim-vue -----
+" - vueファイルなど途中からハイライトが効かなくなることの対応として
+"   ファイルの先頭からパースしてハイライトを行う設定
+autocmd FileType vue syntax sync fromstart
+
+" - vueファイルのように
+"   HTML, JS, CSSの記述が混在するときに
+"   コメントアウトがうまくできなくなるのでその対応
+let g:ft = ''
+function! NERDCommenter_before()
+  if &ft == 'vue'
+    let g:ft = 'vue'
+    let stack = synstack(line('.'), col('.'))
+    if len(stack) > 0
+      let syn = synIDattr((stack)[0], 'name')
+      if len(syn) > 0
+        exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
+      endif
+    endif
+  endif
+endfunction
+function! NERDCommenter_after()
+  if g:ft == 'vue'
+    setf vue
+    let g:ft = ''
+  endif
+endfunction
+
 " ----- scrooloose/syntastic.git -----
 " ファイルを開いたときや保存した時に自動で解析が走らないようにする
 " 手動で解析を実行するには、:SyntasticCheck　コマンド
