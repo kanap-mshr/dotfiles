@@ -6,3 +6,5 @@
     s = status
     ss = status -s
     co = checkout
+[pull]
+	rebase = false
