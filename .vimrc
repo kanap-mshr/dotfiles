@@ -274,8 +274,12 @@ if dein#load_state('$HOME/.cache/dein')
 
 
   " ----- plantuml関連 -----
-  " TODO: あとで設定する
-  " call dein#add('aklt/plantuml-syntax')
+
+  " ## UMLテキストの編集時にシンタックスハイライト
+  " 以下、インストールしておく
+  " brew install graphviz
+  " brew install plantuml
+  call dein#add('aklt/plantuml-syntax')
 
 
   " ----- swagger 関連 -----
@@ -501,6 +505,13 @@ let g:neocomplete#enable_insert_char_pre = 1
 autocmd FileType vue syntax sync fromstart
 
 
+" ----- aklt/plantuml-syntax -----
+au FileType plantuml command! OpenUml : '!start chrome %'
+" au FileType plantuml command! OpenUml : 'open -a Google\ Chrome %'
+
+" plantumlスクリプトの設定
+let g:plantuml_executable_script="~/bin/scripts/create-plantuml.sh"
+
 
 " ----- 要整理 -----
 " TODO: のちほど適宜ちゃんと場所を考慮して設定する
@@ -522,6 +533,12 @@ let g:table_mode_corner = '|'
 " ----- jlanzarotta/bufexplorer -----
 " - bufExplorerを起動
 nmap <silent> ,l :BufExplorer<CR>
+
+
+" ----- aklt/plantuml-syntax -----
+nmap <silent> ou :OpenUml<CR>
+" :command OU OpenUml
+
 
 " ----- Quramy/tsuquyomi -----
 " - 型定義などのツールチップを表示する
@@ -567,8 +584,6 @@ inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><C-y> neocomplcache#close_popup()
 inoremap <expr><C-e> neocomplcache#cancel_popup()
-
-
 
 
 
