@@ -8,7 +8,7 @@ export ZSH="/Users/kanap/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME="apple"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -110,4 +110,8 @@ export JAVA_HOME=`/usr/libexec/java_home -v xx`
 
 ##### Python #####
 eval "$(pyenv init -)"
+export PATH="/Users/$USER/.pyenv/versions/anaconda3-2020.11/bin:$PATH"
+
+##### ghコマンドの補完 #####
+eval "$(gh completion -s zsh)"
 
