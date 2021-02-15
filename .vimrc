@@ -133,7 +133,7 @@ if dein#load_state('$HOME/.cache/dein')
 
   " ## 自動補完
   " - 参考URL: https://qiita.com/hide/items/229ff9460e75426a2d07
-  call dein#add('Shougo/neocomplcache')
+  call dein#add('Shougo/neocomplcache.vim')
 
   " ## vimからサクッと実行
   " - ノーマルモードで \r か :QuickRun で実行
@@ -216,6 +216,7 @@ if dein#load_state('$HOME/.cache/dein')
 
 
   " ----- go -----
+
   " ## go 関連
   " https://christina04.hatenablog.com/entry/migrate-from-vim-go-to-vim-lsp
   call dein#add('prabirshrestha/async.vim')
@@ -229,7 +230,28 @@ if dein#load_state('$HOME/.cache/dein')
   call dein#add('mattn/vim-goimports')
 
 
+
+  " ----- C# -----
+
+  " ## unity用
+  call dein#add('OmniSharp/omnisharp-vim', {
+        \   'autoload': { 'filetypes': [ 'cs', 'csi', 'csx' ] },
+        \   'build': {
+        \     'windows' : 'msbuild server/OmniSharp.sln',
+        \     'mac': 'xbuild server/OmniSharp.sln',
+        \     'unix': 'xbuild server/OmniSharp.sln',
+        \   },
+        \ })
+
+  " ## C#のシンタックス
+  call dein#add('OrangeT/vim-csharp', {
+        \ 'autoload': { 'filetypes': [ 'cs', 'csi', 'csx' ] }
+        \ })
+
+
+
   " ----- マークダウン関連 -----
+
   " ## シンタックスハイライトと折りたたみ
   call dein#add('plasticboy/vim-markdown')
 
@@ -251,7 +273,6 @@ if dein#load_state('$HOME/.cache/dein')
   call dein#add('dhruvasagar/vim-table-mode')
 
 
-
   " ----- plantuml関連 -----
   " TODO: あとで設定する
   " call dein#add('aklt/plantuml-syntax')
@@ -262,16 +283,12 @@ if dein#load_state('$HOME/.cache/dein')
   " call dein#add('xavierchow/vim-swagger-preview')
 
 
-
   " ----- 要検討プラグイン -----
   " TODO: あとで検討する。
   "       特に困ってないがこれ使うと補完が爆速になるかもしれない
   " call dein#add('roxma/nvim-yarp')
   " call dein#add('roxma/vim-hug-neovim-rpc')
   " call dein#add('Shougo/deoplete.nvim')
-
-
-
 
 
   " 設定終了
@@ -434,7 +451,8 @@ let g:winresizer_vert_resize = 1
 let g:winresizer_horiz_resize = 1
 
 " ----- Shougo/neocomplcache -----
-" - TODO: 以下、READMEのデフォルト設定のため使いながら要調整
+autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+
 " Disable AutoComplPop.
 let g:acp_enableAtStartup = 0
 " Use neocomplcache.
@@ -446,8 +464,34 @@ let g:neocomplcache_min_syntax_length = 3
 let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 " Define dictionary.
 let g:neocomplcache_dictionary_filetype_lists = {
-    \ 'default' : ''
-    \ }
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist'
+        \ }
+
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Don't Use smartcase.
+let g:neocomplete#enable_smart_case = 0
+let g:neocomplete#enable_auto_close_preview = 0
+let g:neocomplete#enable_auto_select = 0
+let g:neocomplete#disable_auto_complete = 0
+
+" Enable heavy omni completion.
+" TODO: 以下、未知の関数扱いになってしまう件を要調査
+" call neocomplete#custom#source('_', 'sorters', [])
+if !exists('g:neocomplete#sources')
+        let g:neocomplete#sources = {}
+endif
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+let g:neocomplete#sources#omni#input_patterns.cs = '.*[^=\);]'
+let g:neocomplete#sources.cs = ['omni']
+let g:neocomplete#enable_refresh_always = 0
+let g:echodoc_enable_at_startup = 1
+let g:neocomplete#enable_insert_char_pre = 1
+
+
 
 " ----- posva/vim-vue -----
 " - vueなどの
@@ -499,6 +543,7 @@ map <C-n> :NERDTreeToggle<CR>
 
 " ----- Shougo/neocomplcache -----
 " TODO: 以下、READMEの設定そのままのため使いながら要調整
+" Note: https://github.com/OmniSharp/omnisharp-vim/wiki/Example-NeoComplete-Settings
 
 " Plugin key-mappings.
 inoremap <expr><C-g>     neocomplcache#undo_completion()
@@ -509,14 +554,22 @@ inoremap <expr><C-l>     neocomplcache#complete_common_string()
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function()
   return neocomplcache#smart_close_popup() . "\<CR>"
+  " return neocomplete#close_popup() . "\<CR>"
+  " return pumvisible() ? neocomplete#close_popup() : "\<CR>"
 endfunction
+
 " <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
+
 " <C-h>, <BS>: close popup and delete backword char.
 inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplcache#close_popup()
-inoremap <expr><C-e>  neocomplcache#cancel_popup()
+inoremap <expr><C-y> neocomplcache#close_popup()
+inoremap <expr><C-e> neocomplcache#cancel_popup()
+
+
+
 
 
 " ----- severin-lemaignan/vim-minimap -----
