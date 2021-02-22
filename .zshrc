@@ -8,7 +8,8 @@ export ZSH="/Users/kanap/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="apple"
+# ZSH_THEME="apple"
+ZSH_THEME="garyblessington"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -110,8 +111,24 @@ export JAVA_HOME=`/usr/libexec/java_home -v xx`
 
 ##### Python #####
 eval "$(pyenv init -)"
-export PATH="/Users/$USER/.pyenv/versions/anaconda3-2020.11/bin:$PATH"
+# export PATH="/Users/$USER/.pyenv/versions/anaconda3-2020.11/bin:$PATH"  # commented out by conda initialize
 
 ##### ghコマンドの補完 #####
 eval "$(gh completion -s zsh)"
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/kanap/.pyenv/versions/anaconda3-2020.11/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/kanap/.pyenv/versions/anaconda3-2020.11/etc/profile.d/conda.sh" ]; then
+        . "/Users/kanap/.pyenv/versions/anaconda3-2020.11/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/kanap/.pyenv/versions/anaconda3-2020.11/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
 
