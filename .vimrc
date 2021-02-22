@@ -455,6 +455,8 @@ let g:winresizer_vert_resize = 1
 let g:winresizer_horiz_resize = 1
 
 " ----- Shougo/neocomplcache -----
+" Note: https://www.karakaram.com/neocomplcache/ が参考になりそう
+" TODO: このあたりの設定をもう少し整理する
 autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
 
 " Disable AutoComplPop.
@@ -493,8 +495,13 @@ let g:neocomplete#sources#omni#input_patterns.cs = '.*[^=\);]'
 let g:neocomplete#sources.cs = ['omni']
 let g:neocomplete#enable_refresh_always = 0
 let g:echodoc_enable_at_startup = 1
-let g:neocomplete#enable_insert_char_pre = 1
-
+" let g:neocomplete#enable_insert_char_pre = 1
+" let g:echodoc_enable_at_startup = 0
+let g:neocomplete#enable_insert_char_pre = 0
+" "シンタックス補完を無効に
+" let g:neocomplcache_plugin_disable = {
+" 	\ 'syntax_complete' : 1,
+" 	\ }
 
 
 " ----- posva/vim-vue -----
