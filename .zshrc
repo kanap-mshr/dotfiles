@@ -145,7 +145,7 @@ export PATH="$PATH:/Users/kanap/.dotnet/tools"
 
 # TODO: のちにシェルにする
 
-PROTECT_BRANCHES='master|development'
+PROTECT_BRANCHES='main|master|development'
 
 git-delete-merged-branch() {
     git fetch --prune
