@@ -99,6 +99,9 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+##### ghコマンドの補完 #####
+eval "$(gh completion -s zsh)"
+
 ##### Go #####
 export GOENV_ROOT="$HOME/.goenv"
 export PATH="$GOENV_ROOT/bin:$PATH"
@@ -113,9 +116,7 @@ export JAVA_HOME=`/usr/libexec/java_home -v xx`
 eval "$(pyenv init -)"
 # export PATH="/Users/$USER/.pyenv/versions/anaconda3-2020.11/bin:$PATH"  # commented out by conda initialize
 
-##### ghコマンドの補完 #####
-eval "$(gh completion -s zsh)"
-
+##### conda コマンド #####
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -131,4 +132,25 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+
+##### C# #####
+
+# .NET Core SDK tools
+export PATH="$PATH:/Users/kanap/.dotnet/tools"
+
+
+
+
+##### 独自コマンド #####
+
+# TODO: のちにシェルにする
+
+PROTECT_BRANCHES='master|development'
+
+git-delete-merged-branch() {
+    git fetch --prune
+    git branch --merged | egrep -v "\*|${PROTECT_BRANCHES}" | xargs git branch -d
+}
+
+
 

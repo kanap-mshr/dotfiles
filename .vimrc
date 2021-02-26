@@ -236,6 +236,10 @@ if dein#load_state('$HOME/.cache/dein')
 
   " ----- C# -----
 
+  " ## 前提
+  " brew install mono
+  " brew install libuv
+
   " ## unity用
   call dein#add('OmniSharp/omnisharp-vim', {
         \   'autoload': { 'filetypes': [ 'cs', 'csi', 'csx' ] },
@@ -244,6 +248,19 @@ if dein#load_state('$HOME/.cache/dein')
         \     'mac': 'xbuild server/OmniSharp.sln',
         \     'unix': 'xbuild server/OmniSharp.sln',
         \   },
+        \ })
+  " call dein#add('OmniSharp/omnisharp-vim')
+
+  " ## (unity関連)
+  " - OmniSharpサーバーを自動で起動
+  call dein#add('mattn/vim-goimports')
+
+  " - OmniSharp/omnisharp-vimに必要
+  call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
+
+  " - OmniSharpサーバーを自動で起動
+  call dein#add('OmniSharp/omnisharp-vim', {
+        \   'autoload': { 'filetypes': [ 'cs', 'csi', 'csx' ] },
         \ })
 
   " ## C#のシンタックス
