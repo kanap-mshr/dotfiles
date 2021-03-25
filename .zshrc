@@ -99,8 +99,10 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+
 ##### ghコマンドの補完 #####
 eval "$(gh completion -s zsh)"
+
 
 ##### Go #####
 export GOENV_ROOT="$HOME/.goenv"
@@ -109,12 +111,15 @@ eval "$(goenv init -)"
 export PATH="$GOROOT/bin:$PATH"
 export PATH="$PATH:$GOPATH/bin"
 
+
 ##### Java #####
 export JAVA_HOME=`/usr/libexec/java_home -v xx`
+
 
 ##### Python #####
 eval "$(pyenv init -)"
 # export PATH="/Users/$USER/.pyenv/versions/anaconda3-2020.11/bin:$PATH"  # commented out by conda initialize
+
 
 ##### conda コマンド #####
 
@@ -133,10 +138,16 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+
 ##### C# #####
 
 # .NET Core SDK tools
 export PATH="$PATH:/Users/kanap/.dotnet/tools"
+
+
+##### flutter,dart #####
+
+export PATH=$PATH:/Users/kanap/work/github/kanap-mshr/dotfiles/resources/flutter/bin
 
 
 
