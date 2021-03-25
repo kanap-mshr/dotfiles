@@ -38,6 +38,9 @@ if dein#load_state('$HOME/.cache/dein')
   " - TODO: 辞書の追加
   call dein#add('ujihisa/neco-look')
 
+  " ## スペルチェック
+  call dein#add('kamykn/spelunker.vim')
+
   " ## Codic
   call dein#add('rhysd/unite-codic.vim')
   call dein#add('koron/codic-vim')
@@ -154,7 +157,7 @@ if dein#load_state('$HOME/.cache/dein')
 
   " ## 非同期でシンタックスチェック
   " TODO: 既存シンタックスとの比較と検討
-  " call dein#add('w0rp/ale')
+  call dein#add('w0rp/ale')
 
   " ## 検索時にマッチした個数とそれが何番目であるかの情報を表示
   call dein#add('osyo-manga/vim-anzu')
@@ -233,6 +236,10 @@ if dein#load_state('$HOME/.cache/dein')
 
   " ----- C# -----
 
+  " ## 前提
+  " brew install mono
+  " brew install libuv
+
   " ## unity用
   call dein#add('OmniSharp/omnisharp-vim', {
         \   'autoload': { 'filetypes': [ 'cs', 'csi', 'csx' ] },
@@ -241,6 +248,19 @@ if dein#load_state('$HOME/.cache/dein')
         \     'mac': 'xbuild server/OmniSharp.sln',
         \     'unix': 'xbuild server/OmniSharp.sln',
         \   },
+        \ })
+  " call dein#add('OmniSharp/omnisharp-vim')
+
+  " ## (unity関連)
+  " - OmniSharpサーバーを自動で起動
+  call dein#add('mattn/vim-goimports')
+
+  " - OmniSharp/omnisharp-vimに必要
+  call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
+
+  " - OmniSharpサーバーを自動で起動
+  call dein#add('OmniSharp/omnisharp-vim', {
+        \   'autoload': { 'filetypes': [ 'cs', 'csi', 'csx' ] },
         \ })
 
   " ## C#のシンタックス
@@ -307,338 +327,6 @@ if dein#check_install()
   call dein#install()
 endif
 
-
-
-
-
-" -------------------------------------------------
-" pluginの全般的な設定
-" -------------------------------------------------
-
-" ----- nathanaelkane/vim-indent-guides ------
-" - 起動時に有効化する
-let g:indent_guides_enable_on_vim_startup = 1
-
-" ----- Quramy/tsuquyomi -----
-" - importモジュール宣言を挿入時になるべく短いpathで挿入する
-let g:tsuquyomi_shortest_import_path = 1
-
-" ----- posva/vim-vue -----
-" - vueファイルなど途中からハイライトが効かなくなることの対応として
-"   ファイルの先頭からパースしてハイライトを行う設定
-autocmd FileType vue syntax sync fromstart
-
-" - vueファイルのように
-"   HTML, JS, CSSの記述が混在するときに
-"   コメントアウトがうまくできなくなるのでその対応
-let g:ft = ''
-function! NERDCommenter_before()
-  if &ft == 'vue'
-    let g:ft = 'vue'
-    let stack = synstack(line('.'), col('.'))
-    if len(stack) > 0
-      let syn = synIDattr((stack)[0], 'name')
-      if len(syn) > 0
-        exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
-      endif
-    endif
-  endif
-endfunction
-function! NERDCommenter_after()
-  if g:ft == 'vue'
-    setf vue
-    let g:ft = ''
-  endif
-endfunction
-
-" ----- scrooloose/syntastic.git -----
-" ファイルを開いたときや保存した時に自動で解析が走らないようにする
-" 手動で解析を実行するには、:SyntasticCheck　コマンド
-" 上記コマンドは、キーバインド設定にて別途設定する
-
-" - エラーメッセージの書式
-set statusline+=%#warningmsg#
-
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-" - location list を常に更新
-let g:syntastic_always_populate_loc_list = 1
-
-" - エラーがあったら自動でロケーションリストを開く
-let g:syntastic_auto_loc_list = 1
-
-" - ファイルを開いたときはチェックしない
-let g:syntastic_check_on_open = 0
-
-" - wqではチェックしない
-let g:syntastic_check_on_wq = 0
-
-let g:syntastic_mode_map = {
-      \ 'mode': 'passive',
-      \ 'active_filetypes': ['ruby', 'javascript'],
-      \ 'passive_filetypes': []
-      \ }
-
-" - 構文チェックを行うモジュール
-let g:syntastic_ruby_checkers=['rubocop']
-let g:syntastic_javascript_checkers = ['eslint']
-
-" ----- nikvdp/ejs-syntax -----
-" - インクルードファイルでもシンタックスを付加する
-autocmd BufNewFile,BufRead *.ejs set filetype=ejs
-autocmd BufNewFile,BufRead *._ejs set filetype=ejs
-function! s:DetectEjs()
-    if getline(1) =~ '^#!.*\<ejs\>'
-        set filetype=ejs
-    endif
-endfunction
-autocmd BufNewFile,BufRead * call s:DetectEjs()
-
-" ----- plasticboy/vim-markdown -----
-" - markdownなファイルを開いたときにデフォルトで折りたたみになってしまうをOFF
-let g:vim_markdown_folding_disabled = 1
-let g:vim_markdown_auto_insert_bullets = 0
-let g:vim_markdown_new_list_item_indent = 0
-
-" ----- kannokanno/previm -----
-" - このままだと.mkdのファイルに対してのハイライトらしいため
-"   .mdもfiletype=markdownとなるように設定
-autocmd BufRead,BufNewFile *.md set filetype=markdown
-let g:previm_open_cmd = 'open -a Google\ Chrome'
-
-" ----- scrooloose/nerdtree -----
-function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
- exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
- exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
-endfunction
-call NERDTreeHighlightFile('py',     'yellow',  'none', 'yellow',  '#151515')
-call NERDTreeHighlightFile('md',     'blue',    'none', '#3366FF', '#151515')
-call NERDTreeHighlightFile('yml',    'yellow',  'none', 'yellow',  '#151515')
-call NERDTreeHighlightFile('config', 'yellow',  'none', 'yellow',  '#151515')
-call NERDTreeHighlightFile('conf',   'yellow',  'none', 'yellow',  '#151515')
-call NERDTreeHighlightFile('json',   'yellow',  'none', 'yellow',  '#151515')
-call NERDTreeHighlightFile('html',   'yellow',  'none', 'yellow',  '#151515')
-call NERDTreeHighlightFile('styl',   'cyan',    'none', 'cyan',    '#151515')
-call NERDTreeHighlightFile('css',    'cyan',    'none', 'cyan',    '#151515')
-call NERDTreeHighlightFile('rb',     'Red',     'none', 'red',     '#151515')
-call NERDTreeHighlightFile('js',     'Red',     'none', '#ffa500', '#151515')
-call NERDTreeHighlightFile('php',    'Magenta', 'none', '#ff00ff', '#151515')
-" - 隠しファイルをデフォルトで表示
-let NERDTreeShowHidden = 1
-let g:NERDTreeDirArrows = 1
-let g:NERDTreeDirArrowExpandable  = '▶'
-let g:NERDTreeDirArrowCollapsible = '▼'
-
-" ----- prabirshrestha/vim-lsp -----
-" - ファイルの変更に伴いリアルタイムにエラー表示する機能 Diagnostics を1:有効
-let g:lsp_diagnostics_enabled = 1
-let g:lsp_diagnostics_echo_cursor = 1
-" - 自動で入力補完ポップアップを表示する設定
-let g:asyncomplete_auto_popup = 1
-let g:asyncomplete_auto_completeopt = 0
-" - ポップアップを表示するまでのディレイ
-let g:asyncomplete_popup_delay = 200
-" - LSP の仕様である textEdit を有効
-"   (少し実験的な実装になっている為、もし誤動作する様であれば 0 に設定するのが良い)
-let g:lsp_text_edit_enabled = 0
-
-" ----- Townk/vim-autoclose -----
-" - 閉じカッコを自動で閉める際のスペース数
-let g:AutoCloseExpandSpace=0
-
-" ----- simeji/winresizer -----
-" - デフォルトだと垂直方向は10行単位、
-"   水平方向は3文字単位で移動されるため
-"   下記設定で1ずつ動くように変更
-let g:winresizer_vert_resize = 1
-let g:winresizer_horiz_resize = 1
-
-" ----- Shougo/neocomplcache -----
-" Note: https://www.karakaram.com/neocomplcache/ が参考になりそう
-" TODO: このあたりの設定をもう少し整理する
-autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
-
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-" Use neocomplcache.
-let g:neocomplcache_enable_at_startup = 1
-" Use smartcase.
-let g:neocomplcache_enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplcache_min_syntax_length = 3
-let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-" Define dictionary.
-let g:neocomplcache_dictionary_filetype_lists = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist'
-        \ }
-
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Don't Use smartcase.
-let g:neocomplete#enable_smart_case = 0
-let g:neocomplete#enable_auto_close_preview = 0
-let g:neocomplete#enable_auto_select = 0
-let g:neocomplete#disable_auto_complete = 0
-
-" Enable heavy omni completion.
-" TODO: 以下、未知の関数扱いになってしまう件を要調査
-" call neocomplete#custom#source('_', 'sorters', [])
-if !exists('g:neocomplete#sources')
-        let g:neocomplete#sources = {}
-endif
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
-endif
-let g:neocomplete#sources#omni#input_patterns.cs = '.*[^=\);]'
-let g:neocomplete#sources.cs = ['omni']
-let g:neocomplete#enable_refresh_always = 0
-let g:echodoc_enable_at_startup = 1
-" let g:neocomplete#enable_insert_char_pre = 1
-" let g:echodoc_enable_at_startup = 0
-let g:neocomplete#enable_insert_char_pre = 0
-" "シンタックス補完を無効に
-" let g:neocomplcache_plugin_disable = {
-" 	\ 'syntax_complete' : 1,
-" 	\ }
-
-
-" ----- posva/vim-vue -----
-" - vueなどの
-"   複数の言語が混ざってるファイルだと
-"   vim の効率よくシンタックスハイライトかけようとする機能が
-"   うまくいかないことがあるので、その対応
-autocmd FileType vue syntax sync fromstart
-
-
-" ----- aklt/plantuml-syntax -----
-au FileType plantuml command! OpenUml : '!start chrome %'
-" au FileType plantuml command! OpenUml : 'open -a Google\ Chrome %'
-
-" plantumlスクリプトの設定
-let g:plantuml_executable_script="~/bin/scripts/create-plantuml.sh"
-
-
-" ----- 要整理 -----
-" TODO: のちほど適宜ちゃんと場所を考慮して設定する
-"       (とりあえず、整理せずにそのまま昔のmacからの移植)
-
-" つくよみの定義ジャンブを別タブで開く
-" let g:tsuquyomi_definition_split = 1
-
-" テーブル整形
-let g:table_mode_corner = '|'
-
-
-
-
-" -------------------------------------------------
-" pluginのキーバインド設定
-" -------------------------------------------------
-
-" ----- jlanzarotta/bufexplorer -----
-" - bufExplorerを起動
-nmap <silent> ,l :BufExplorer<CR>
-
-
-" ----- aklt/plantuml-syntax -----
-nmap <silent> ou :OpenUml<CR>
-" :command OU OpenUml
-
-
-" ----- Quramy/tsuquyomi -----
-" - 型定義などのツールチップを表示する
-" - <Leader>tで表示します。
-set ballooneval
-autocmd FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
-
-" ----- scrooloose/syntastic.git -----
-nnoremap <C-C> :w<CR>:SyntasticCheck<CR>
-
-" ----- kannokanno/previm -----
-" ctrl pでプレビュー
-nnoremap <silent> <C-p> :PrevimOpen<CR>
-
-" ----- scrooloose/nerdtree -----
-" - ctrl+nで起動
-map <C-n> :NERDTreeToggle<CR>
-
-
-" ----- Shougo/neocomplcache -----
-" TODO: 以下、READMEの設定そのままのため使いながら要調整
-" Note: https://github.com/OmniSharp/omnisharp-vim/wiki/Example-NeoComplete-Settings
-
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplcache#undo_completion()
-inoremap <expr><C-l>     neocomplcache#complete_common_string()
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return neocomplcache#smart_close_popup() . "\<CR>"
-  " return neocomplete#close_popup() . "\<CR>"
-  " return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-endfunction
-
-" <TAB>: completion.
-inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
-
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y> neocomplcache#close_popup()
-inoremap <expr><C-e> neocomplcache#cancel_popup()
-
-
-
-" ----- severin-lemaignan/vim-minimap -----
-" let g:minimap_show='<leader>ms'
-" let g:minimap_update='<leader>mu'
-" let g:minimap_close='<leader>gc'
-" let g:minimap_toggle='<leader>gt'
-let g:minimap_toggle='<leader>mm'
-
-
-" ----- osyo-manga/vim-anzu -----
-" mapping
-nmap n <Plug>(anzu-n-with-echo)
-nmap N <Plug>(anzu-N-with-echo)
-nmap * <Plug>(anzu-star-with-echo)
-nmap # <Plug>(anzu-sharp-with-echo)
-" clear status
-nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
-" statusline
-set statusline=%{anzu#search_status()}
-
-" ----- terryma/vim-expand-region -----
-vmap v <Plug>(expand_region_expand)
-vmap <C-v> <Plug>(expand_region_shrink)
-
-" ----- prabirshrestha/vim-lsp -----
-nmap <silent> gd :LspDefinition<CR>
-nmap <silent> <f2> :LspRename<CR>
-nmap <silent> <Leader>d :LspTypeDefinition<CR>
-nmap <silent> <Leader>r :LspReferences<CR>
-nmap <silent> <Leader>i :LspImplementation<CR>
-
-
-
-
-" -------------------------------------------------
-" plugin以外のキーバインド設定
-" -------------------------------------------------
-
-" ## <Leader>キーをスペースに割り当てる
-let mapleader = "\<Space>"
-
-" ## `:grep`で`:vimgrep`を使用できるようにする
-set grepprg=internal
-
-" ## インサートモードのEscをjjにバインド
-inoremap <silent> jj <ESC>
 
 
 
@@ -772,4 +460,365 @@ set nobackup
 
 " ## un~ ファイル(undoの情報)を作成しない
 set noundofile
+
+" ## スペルチェック
+" set spelllang=en,cjk
+set nospell
+hi clear SpellBad
+hi SpellBad cterm=underline
+
+
+
+
+" -------------------------------------------------
+" pluginの全般的な設定
+" -------------------------------------------------
+
+" ----- nathanaelkane/vim-indent-guides ------
+" - 起動時に有効化する
+let g:indent_guides_enable_on_vim_startup = 1
+
+" ----- Quramy/tsuquyomi -----
+" - importモジュール宣言を挿入時になるべく短いpathで挿入する
+let g:tsuquyomi_shortest_import_path = 1
+
+" ----- posva/vim-vue -----
+" - vueファイルなど途中からハイライトが効かなくなることの対応として
+"   ファイルの先頭からパースしてハイライトを行う設定
+autocmd FileType vue syntax sync fromstart
+
+" - vueファイルのように
+"   HTML, JS, CSSの記述が混在するときに
+"   コメントアウトがうまくできなくなるのでその対応
+let g:ft = ''
+function! NERDCommenter_before()
+  if &ft == 'vue'
+    let g:ft = 'vue'
+    let stack = synstack(line('.'), col('.'))
+    if len(stack) > 0
+      let syn = synIDattr((stack)[0], 'name')
+      if len(syn) > 0
+        exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
+      endif
+    endif
+  endif
+endfunction
+function! NERDCommenter_after()
+  if g:ft == 'vue'
+    setf vue
+    let g:ft = ''
+  endif
+endfunction
+
+" ----- scrooloose/syntastic.git -----
+" ファイルを開いたときや保存した時に自動で解析が走らないようにする
+" 手動で解析を実行するには、:SyntasticCheck　コマンド
+" 上記コマンドは、キーバインド設定にて別途設定する
+
+" - エラーメッセージの書式
+set statusline+=%#warningmsg#
+
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+" - location list を常に更新
+let g:syntastic_always_populate_loc_list = 1
+
+" - エラーがあったら自動でロケーションリストを開く
+let g:syntastic_auto_loc_list = 1
+
+" - ファイルを開いたときはチェックしない
+let g:syntastic_check_on_open = 0
+
+" - wqではチェックしない
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_mode_map = {
+      \ 'mode': 'passive',
+      \ 'active_filetypes': ['ruby', 'javascript'],
+      \ 'passive_filetypes': []
+      \ }
+
+" - 構文チェックを行うモジュール
+let g:syntastic_ruby_checkers=['rubocop']
+let g:syntastic_javascript_checkers = ['eslint']
+
+" ----- nikvdp/ejs-syntax -----
+" - インクルードファイルでもシンタックスを付加する
+autocmd BufNewFile,BufRead *.ejs set filetype=ejs
+autocmd BufNewFile,BufRead *._ejs set filetype=ejs
+function! s:DetectEjs()
+    if getline(1) =~ '^#!.*\<ejs\>'
+        set filetype=ejs
+    endif
+endfunction
+autocmd BufNewFile,BufRead * call s:DetectEjs()
+
+" ----- plasticboy/vim-markdown -----
+" - markdownなファイルを開いたときにデフォルトで折りたたみになってしまうをOFF
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_auto_insert_bullets = 0
+let g:vim_markdown_new_list_item_indent = 0
+
+" ----- kannokanno/previm -----
+" - このままだと.mkdのファイルに対してのハイライトらしいため
+"   .mdもfiletype=markdownとなるように設定
+autocmd BufRead,BufNewFile *.md set filetype=markdown
+let g:previm_open_cmd = 'open -a Google\ Chrome'
+
+" ----- scrooloose/nerdtree -----
+" - 隠しファイルをデフォルトで表示
+let NERDTreeShowHidden = 1
+function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+ exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+ exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+endfunction
+call NERDTreeHighlightFile('py',     'yellow',  'none', 'yellow',  '#151515')
+call NERDTreeHighlightFile('md',     'blue',    'none', '#3366FF', '#151515')
+call NERDTreeHighlightFile('yml',    'yellow',  'none', 'yellow',  '#151515')
+call NERDTreeHighlightFile('config', 'yellow',  'none', 'yellow',  '#151515')
+call NERDTreeHighlightFile('conf',   'yellow',  'none', 'yellow',  '#151515')
+call NERDTreeHighlightFile('json',   'yellow',  'none', 'yellow',  '#151515')
+call NERDTreeHighlightFile('html',   'yellow',  'none', 'yellow',  '#151515')
+call NERDTreeHighlightFile('styl',   'cyan',    'none', 'cyan',    '#151515')
+call NERDTreeHighlightFile('css',    'cyan',    'none', 'cyan',    '#151515')
+call NERDTreeHighlightFile('rb',     'Red',     'none', 'red',     '#151515')
+call NERDTreeHighlightFile('js',     'Red',     'none', '#ffa500', '#151515')
+call NERDTreeHighlightFile('php',    'Magenta', 'none', '#ff00ff', '#151515')
+let g:NERDTreeDirArrows = 1
+let g:NERDTreeDirArrowExpandable  = '▶'
+let g:NERDTreeDirArrowCollapsible = '▼'
+" コメントアウト設定
+filetype on
+let g:NERDSpaceDelims=1
+let g:NERDDefaultAlign='left'
+
+
+" ----- prabirshrestha/vim-lsp -----
+" - ファイルの変更に伴いリアルタイムにエラー表示する機能 Diagnostics を1:有効
+let g:lsp_diagnostics_enabled = 1
+let g:lsp_diagnostics_echo_cursor = 1
+" - 自動で入力補完ポップアップを表示する設定
+let g:asyncomplete_auto_popup = 1
+let g:asyncomplete_auto_completeopt = 0
+" - ポップアップを表示するまでのディレイ
+let g:asyncomplete_popup_delay = 200
+" - LSP の仕様である textEdit を有効
+"   (少し実験的な実装になっている為、もし誤動作する様であれば 0 に設定するのが良い)
+let g:lsp_text_edit_enabled = 0
+
+" ----- Townk/vim-autoclose -----
+" - 閉じカッコを自動で閉める際のスペース数
+let g:AutoCloseExpandSpace=0
+
+" ----- simeji/winresizer -----
+" - デフォルトだと垂直方向は10行単位、
+"   水平方向は3文字単位で移動されるため
+"   下記設定で1ずつ動くように変更
+let g:winresizer_vert_resize = 1
+let g:winresizer_horiz_resize = 1
+
+" ----- Shougo/neocomplcache -----
+" Note: https://www.karakaram.com/neocomplcache/ が参考になりそう
+" TODO: このあたりの設定をもう少し整理する
+autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+
+" 補完候補の数
+let g:neocomplcache_max_list = 5
+" AutoComplPopを無効化する設定
+let g:acp_enableAtStartup = 0
+" neocomplcacheを起動時に有効化する設定(AutoComplPopと違ってneocomplcacheは自動起動しない)
+let g:neocomplcache_enable_at_startup = 1
+" neocomplcacheのsmart case機能
+let g:neocomplcache_enable_smart_case = 0
+" シンタックスをキャッシュするときの最小文字長を3とする
+let g:neocomplcache_min_syntax_length = 3
+" neocomplcacheを自動的にロックするバッファ名のパターン
+let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+" Define dictionary.
+let g:neocomplcache_dictionary_filetype_lists = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist'
+        \ }
+
+" " 起動時に有効化
+let g:neocomplete#enable_at_startup = 1
+
+" Don't Use smartcase.
+let g:neocomplete#enable_smart_case = 0
+let g:neocomplete#enable_auto_close_preview = 0
+let g:neocomplete#enable_auto_select = 0
+let g:neocomplete#disable_auto_complete = 0
+
+" Enable heavy omni completion.
+" TODO: 以下、未知の関数扱いになってしまう件を要調査
+" call neocomplete#custom#source('_', 'sorters', [])
+if !exists('g:neocomplete#sources')
+        let g:neocomplete#sources = {}
+endif
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+let g:neocomplete#sources#omni#input_patterns.cs = '.*[^=\);]'
+let g:neocomplete#sources.cs = ['omni']
+let g:neocomplete#enable_refresh_always = 0
+let g:echodoc_enable_at_startup = 1
+" let g:neocomplete#enable_insert_char_pre = 1
+" let g:echodoc_enable_at_startup = 0
+let g:neocomplete#enable_insert_char_pre = 0
+" "シンタックス補完を無効に
+" let g:neocomplcache_plugin_disable = {
+" 	\ 'syntax_complete' : 1,
+" 	\ }
+
+
+" ----- posva/vim-vue -----
+" - vueなどの
+"   複数の言語が混ざってるファイルだと
+"   vim の効率よくシンタックスハイライトかけようとする機能が
+"   うまくいかないことがあるので、その対応
+autocmd FileType vue syntax sync fromstart
+
+
+" ----- aklt/plantuml-syntax -----
+au FileType plantuml command! OpenUml : '!start chrome %'
+" au FileType plantuml command! OpenUml : 'open -a Google\ Chrome %'
+
+" plantumlスクリプトの設定
+let g:plantuml_executable_script="~/bin/scripts/create-plantuml.sh"
+
+
+
+" ----- w0rp/ale -----
+" 自動コンパイルチェック
+let g:ale_sign_column_always = 1
+let g:ale_keep_list_window_open = 1
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:syntastic_check_on_wq = 0
+
+
+
+
+
+" ----- 要整理 -----
+" TODO: のちほど適宜ちゃんと場所を考慮して設定する
+"       (とりあえず、整理せずにそのまま昔のmacからの移植)
+
+" つくよみの定義ジャンブを別タブで開く
+let g:tsuquyomi_definition_split = 1
+
+" テーブル整形
+let g:table_mode_corner = '|'
+
+
+
+
+" -------------------------------------------------
+" pluginのキーバインド設定
+" -------------------------------------------------
+
+" ----- jlanzarotta/bufexplorer -----
+" - bufExplorerを起動
+nmap <silent> ,l :BufExplorer<CR>
+
+
+" ----- aklt/plantuml-syntax -----
+nmap <silent> ou :OpenUml<CR>
+" :command OU OpenUml
+
+
+" ----- Quramy/tsuquyomi -----
+" - 型定義などのツールチップを表示する
+" - <Leader>tで表示します。
+set ballooneval
+autocmd FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
+
+" ----- scrooloose/syntastic.git -----
+nnoremap <C-C> :w<CR>:SyntasticCheck<CR>
+
+" ----- kannokanno/previm -----
+" ctrl pでプレビュー
+nnoremap <silent> <C-p> :PrevimOpen<CR>
+
+" ----- scrooloose/nerdtree -----
+" - ctrl+nで起動
+map <C-n> :NERDTreeToggle<CR>
+
+
+" ----- Shougo/neocomplcache -----
+" TODO: 以下、READMEの設定そのままのため使いながら要調整
+" Note: https://github.com/OmniSharp/omnisharp-vim/wiki/Example-NeoComplete-Settings
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplcache#undo_completion()
+inoremap <expr><C-l>     neocomplcache#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return neocomplcache#smart_close_popup() . "\<CR>"
+  " return neocomplete#close_popup() . "\<CR>"
+  " return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+endfunction
+
+" <TAB>: completion.
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
+
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y> neocomplcache#close_popup()
+inoremap <expr><C-e> neocomplcache#cancel_popup()
+
+
+
+" ----- severin-lemaignan/vim-minimap -----
+" let g:minimap_show='<leader>ms'
+" let g:minimap_update='<leader>mu'
+" let g:minimap_close='<leader>gc'
+" let g:minimap_toggle='<leader>gt'
+let g:minimap_toggle='<leader>mm'
+
+
+" ----- osyo-manga/vim-anzu -----
+" mapping
+nmap n <Plug>(anzu-n-with-echo)
+nmap N <Plug>(anzu-N-with-echo)
+nmap * <Plug>(anzu-star-with-echo)
+nmap # <Plug>(anzu-sharp-with-echo)
+" clear status
+nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
+" statusline
+set statusline=%{anzu#search_status()}
+
+" ----- terryma/vim-expand-region -----
+vmap v <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
+
+" ----- prabirshrestha/vim-lsp -----
+nmap <silent> gd :LspDefinition<CR>
+nmap <silent> <f2> :LspRename<CR>
+nmap <silent> <Leader>d :LspTypeDefinition<CR>
+nmap <silent> <Leader>r :LspReferences<CR>
+nmap <silent> <Leader>i :LspImplementation<CR>
+
+
+
+
+" -------------------------------------------------
+" plugin以外のキーバインド設定
+" -------------------------------------------------
+
+" ## <Leader>キーをスペースに割り当てる
+let mapleader = "\<Space>"
+
+" ## `:grep`で`:vimgrep`を使用できるようにする
+set grepprg=internal
+
+" ## インサートモードのEscをjjにバインド
+inoremap <silent> jj <ESC>
+
 
