@@ -113,8 +113,8 @@ export PATH="$PATH:$GOPATH/bin"
 
 
 ##### Java #####
-export JAVA_HOME=`/usr/libexec/java_home -v xx`
-
+export JAVA_HOME=`/usr/libexec/java_home -v "14"`
+export PATH=${JAVA_HOME}/bin:${PATH}
 
 ##### Python #####
 eval "$(pyenv init -)"
