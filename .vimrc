@@ -269,6 +269,11 @@ if dein#load_state('$HOME/.cache/dein')
         \ })
 
 
+  " ----- dart -----
+
+  call dein#add('dart-lang/dart-vim-plugin')
+
+
 
   " ----- マークダウン関連 -----
 
