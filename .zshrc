@@ -150,6 +150,9 @@ export PATH="$PATH:/Users/kanap/.dotnet/tools"
 export PATH=$PATH:/Users/kanap/work/github/kanap-mshr/dotfiles/resources/flutter/bin
 
 
+##### terraform-lsp #####
+
+export PATH="$PATH:~/.bin"
 
 
 ##### 独自コマンド #####
