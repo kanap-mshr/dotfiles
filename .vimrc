@@ -275,6 +275,13 @@ if dein#load_state('$HOME/.cache/dein')
 
 
 
+  " ----- terraform -----
+  "
+  call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
+  call dein#add('hashivim/vim-terraform')
+
+
+
   " ----- マークダウン関連 -----
 
   " ## シンタックスハイライトと折りたたみ
@@ -703,7 +710,10 @@ let g:ale_echo_msg_warning_str = 'W'
 let g:syntastic_check_on_wq = 0
 
 
+" ----- hashivim/vim-terraform -----
 
+" tfファイル保存時に自動整形
+let g:terraform_fmt_on_save=1
 
 
 " ----- 要整理 -----
