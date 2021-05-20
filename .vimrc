@@ -713,7 +713,7 @@ let g:syntastic_check_on_wq = 0
 " ----- hashivim/vim-terraform -----
 
 " tfファイル保存時に自動整形
-let g:terraform_fmt_on_save=1
+" let g:terraform_fmt_on_save=1
 
 
 " ----- 要整理 -----
