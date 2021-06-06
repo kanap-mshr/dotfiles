@@ -19,7 +19,7 @@ function main() {
   do
     # echo $line
     open -a "Google Chrome" "$line"
-    sleep 0.5
+    sleep 0.1
   done < ../open-chrome/url-list.txt
 }
 
