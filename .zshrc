@@ -179,7 +179,6 @@ git-delete-merged-branch() {
     git branch --merged | egrep -v "\*|${PROTECT_BRANCHES}" | xargs git branch -d
 }
 
-
 ##### 独自スクリプトのコマンド呼び出し #####
 
 export PATH="$PATH:/Users/kanap/work/github/kanap-mshr/dotfiles/scripts/links"
@@ -187,6 +186,8 @@ export PATH="$PATH:/Users/kanap/work/github/kanap-mshr/dotfiles/scripts/links"
 
 ##### alias #####
 
+alias rm-descktop='ls -la ~/Desktop/* && rm -rf ~/Desktop/*'
+alias dsstore='bash /Users/kanap/work/github/kanap-mshr/dotfiles/scripts/delete-ds-store.sh'
 alias ranger='ranger ~/work/'
 alias cwg='cd ~/work/github/'
 alias pwdc='pwd | tr -d "\n" | pbcopy'
