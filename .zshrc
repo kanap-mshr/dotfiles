@@ -155,6 +155,19 @@ export PATH=$PATH:/Users/kanap/work/github/kanap-mshr/dotfiles/resources/flutter
 export PATH="$PATH:~/.bin"
 
 
+##### awsp #####
+
+function awsp() {
+  if [ $# -ge 1 ]; then
+    export AWS_PROFILE="$1"
+    echo "Set AWS_PROFILE=$AWS_PROFILE."
+  else
+    source _awsp
+  fi
+  export AWS_DEFAULT_PROFILE=$AWS_PROFILE
+}
+
+
 ##### 独自コマンド #####
 
 # TODO: のちにシェルにする
@@ -167,4 +180,12 @@ git-delete-merged-branch() {
 }
 
 
+
+
+##### alias #####
+
+alias ranger='ranger ~/work/'
+alias cwg='cd ~/work/github/'
+alias pwdc='pwd | tr -d "\n" | pbcopy'
+alias zshrc='vim ~/.zshrc'
 
