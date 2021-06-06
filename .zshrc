@@ -117,9 +117,14 @@ export JAVA_HOME=`/usr/libexec/java_home -v "14"`
 export PATH=${JAVA_HOME}/bin:${PATH}
 
 ##### Python #####
-eval "$(pyenv init -)"
-# export PATH="/Users/$USER/.pyenv/versions/anaconda3-2020.11/bin:$PATH"  # commented out by conda initialize
+# eval "$(pyenv init -)"
+# # export PATH="/Users/$USER/.pyenv/versions/anaconda3-2020.11/bin:$PATH"  # commented out by conda initialize
 
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init --path)"
+fi
 
 ##### conda コマンド #####
 
