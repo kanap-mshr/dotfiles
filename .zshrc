@@ -99,8 +99,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-
 ##### ghコマンドの補完 #####
+#
 eval "$(gh completion -s zsh)"
 
 
@@ -180,6 +180,9 @@ git-delete-merged-branch() {
 }
 
 
+##### 独自スクリプトのコマンド呼び出し #####
+
+export PATH="$PATH:/Users/kanap/work/github/kanap-mshr/dotfiles/scripts/links"
 
 
 ##### alias #####
@@ -188,4 +191,6 @@ alias ranger='ranger ~/work/'
 alias cwg='cd ~/work/github/'
 alias pwdc='pwd | tr -d "\n" | pbcopy'
 alias zshrc='vim ~/.zshrc'
+
+
 

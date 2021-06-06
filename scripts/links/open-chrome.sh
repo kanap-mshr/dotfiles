@@ -1,0 +1,1 @@
+/Users/kanap/work/github/kanap-mshr/dotfiles/scripts/open-chrome/open-chrome.sh
